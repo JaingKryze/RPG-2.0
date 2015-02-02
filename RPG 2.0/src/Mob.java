@@ -1,16 +1,16 @@
 
 public abstract class Mob
 	{
-	Weapon weapon;
-	Armor armor;
-	String name;
-	AttackBehavior mobAttackBehavior;
-	int maxHp;
-	int currentHp;
-	int str;
-	int vit;
-	int dxt;
-	int luck;
+	protected Weapon weapon;
+	protected Armor armor;
+	protected String name;
+	protected AttackBehavior mobAttackBehavior;
+	protected int maxHp;
+	protected int currentHp;
+	protected int str;
+	protected int vit;
+	protected int dxt;
+	protected int luck;
 	public Weapon getWeapon()
 		{
 		return weapon;
@@ -90,5 +90,9 @@ public abstract class Mob
 	public void setLuck(int luck)
 		{
 		this.luck = luck;
+		}
+	public int performAttack(Mob a, Mob b)
+		{
+		return mobAttackBehavior.attack(a,b);
 		}
 	}

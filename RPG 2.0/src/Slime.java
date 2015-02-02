@@ -5,7 +5,7 @@ public class Slime extends Hostile
 		{
 		maxHp = 50;
 		currentHp = 50;
-		str = 1;
+		str = 2;
 		vit = 1;
 		dxt = 1;
 		luck = 1;
@@ -18,7 +18,7 @@ public class Slime extends Hostile
 		dropChances.add(50.0);
 		drops.add(new LeatherArmor());
 		dropChances.add(50.0);
-		weapon = (null);
-		armor = (null);
+		weapon = new NoWeapon();
+		armor = new NoArmor();
 		}
 	}

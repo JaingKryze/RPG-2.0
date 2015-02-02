@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 public class Hostile extends Mob
 	{
-	int expDrop;
-	ArrayList<Item> drops = new ArrayList<Item>();
-	ArrayList<Double> dropChances = new ArrayList<Double>();
+	protected int expDrop;
+	protected ArrayList<Item> drops = new ArrayList<Item>();
+	protected ArrayList<Double> dropChances = new ArrayList<Double>();
 	public Hostile()
 		{
 		
