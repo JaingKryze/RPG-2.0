@@ -26,11 +26,11 @@ public class Potion extends Item
 		{
 		if(PlayGame.player.getMaxHp()+hpRestore > PlayGame.player.getVit()*50)
 			{
-			PlayGame.player.setMaxHp(PlayGame.player.getVit()*50);
+			PlayGame.player.setCurrentHp(PlayGame.player.getMaxHp());
 			}
 		else
 			{
-			PlayGame.player.setMaxHp(PlayGame.player.getCurrentHp()+hpRestore);
+			PlayGame.player.setCurrentHp(PlayGame.player.getCurrentHp()+hpRestore);
 			}
 		}
 	@Override

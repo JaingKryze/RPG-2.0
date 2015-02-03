@@ -1,6 +1,7 @@
 
 public abstract class Mob
 	{
+	protected String type;
 	protected Weapon weapon;
 	protected Armor armor;
 	protected String name;
@@ -11,6 +12,14 @@ public abstract class Mob
 	protected int vit;
 	protected int dxt;
 	protected int luck;
+	public String getType()
+		{
+		return type;
+		}
+	public void setType(String type)
+		{
+		this.type = type;
+		}
 	public Weapon getWeapon()
 		{
 		return weapon;
@@ -91,7 +100,7 @@ public abstract class Mob
 		{
 		this.luck = luck;
 		}
-	public int performAttack(Mob a, Mob b)
+	public int performAttack(Mob a, Mob b) throws InterruptedException
 		{
 		return mobAttackBehavior.attack(a,b);
 		}

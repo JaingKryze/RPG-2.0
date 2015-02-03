@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 public class Player extends Mob
 	{
 	protected int lvl;
@@ -7,6 +8,7 @@ public class Player extends Mob
 	protected Item[] inventory = new Item[30];
 	public Player(int mHp, int cHp, int s, int v, int d, int l, AttackBehavior aB, String n, int lv, int xp, int xpN, Item[] i, Armor a, Weapon w)
 		{
+		type = "player";
 		maxHp = v*50+50;
 		currentHp = cHp;
 		str = s;
@@ -44,7 +46,15 @@ public class Player extends Mob
 		}
 	public void setExp(int exp)
 		{
-		this.exp = exp;
+		if(exp<expNeeded)
+			{
+			this.exp = exp;
+			}
+		else
+			{
+			levelUp();
+			this.exp = 0;
+			}
 		}
 	public int getExpNeeded()
 		{
@@ -53,5 +63,89 @@ public class Player extends Mob
 	public void setExpNeeded(int expNeeded)
 		{
 		this.expNeeded = expNeeded;
+		}
+	
+	public void levelUp()
+		{
+		int num;
+		int statTotal = 3;
+		Scanner input = new Scanner(System.in);
+		System.out.println("Level up you have 3 stat points. You can put them into Vit" + vit + " (health), Str" + str + " (attack power), Dxt" +dxt +" (speed+dodge chance), and luck"+ luck +"(critical hit chance + dodge chance).");
+		boolean checkStatIn = true;
+		do
+			{
+			System.out.println("How many points do you want in Vit?");
+			num = input.nextInt();
+			if (num <= statTotal)
+				{
+			    vit = vit + num;
+				statTotal = statTotal-(num);
+				checkStatIn = true;
+				}
+			else
+				{
+				System.out.println("Pick a number less than or equal to " + statTotal + ".");
+				checkStatIn = false;
+				}
+			}
+		while(checkStatIn == false);
+		checkStatIn = true;
+		do
+			{
+			System.out.println("How many points do you want in Str?");
+			num = input.nextInt();
+			if (num <= statTotal)
+				{
+				str = str + num;
+				statTotal = statTotal-(num);
+				checkStatIn = true;
+				}
+			else
+				{
+				System.out.println("Pick a number less than or equal to " + statTotal + ".");
+				checkStatIn = false;
+				}
+			}
+		while(checkStatIn == false);
+		checkStatIn = true;
+		do
+			{
+			System.out.println("How many points do you want in Dxt?");
+			num = input.nextInt();
+			if (num <= statTotal)
+				{
+				dxt = dxt + num;
+				statTotal = statTotal-(num);
+				checkStatIn = true;
+				}
+			else
+				{
+				System.out.println("Pick a number less than or equal to " + statTotal + ".");
+				checkStatIn = false;
+				}
+			}
+		while(checkStatIn == false);
+		checkStatIn = true;
+		do
+			{
+			num = input.nextInt();
+			System.out.println("How many points do you want in luck?");
+			if (num <= statTotal)
+				{
+				statTotal = statTotal-(num);
+				checkStatIn = true;
+				luck = luck + num;
+				}
+			else
+				{
+				System.out.println("Pick a number less than or equal to " + statTotal + ".");
+				checkStatIn = false;
+				}
+			}
+		while(checkStatIn == false);
+		maxHp = vit*50;
+		currentHp = maxHp;
+		lvl++;
+		expNeeded = lvl*100;
 		}
 	}

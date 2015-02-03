@@ -6,10 +6,11 @@ public class Hostile extends Mob
 	protected ArrayList<Double> dropChances = new ArrayList<Double>();
 	public Hostile()
 		{
-		
+		type = "hostile";
 		}
 	public Hostile(int mHp, int cHp, int s, int v, int d, int l, AttackBehavior aB, String n, int ex, ArrayList<Item> dr, ArrayList<Double> dC, Armor a, Weapon w)
 		{
+		type = "hostile";
 		maxHp = v*50+50;
 		currentHp = cHp;
 		str = s;
