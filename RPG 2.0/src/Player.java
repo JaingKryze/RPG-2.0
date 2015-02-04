@@ -9,7 +9,7 @@ public class Player extends Mob
 	public Player(int mHp, int cHp, int s, int v, int d, int l, AttackBehavior aB, String n, int lv, int xp, int xpN, Item[] i, Armor a, Weapon w)
 		{
 		type = "player";
-		maxHp = v*50+50;
+		maxHp = v*50;
 		currentHp = cHp;
 		str = s;
 		vit = v;
@@ -128,8 +128,8 @@ public class Player extends Mob
 		checkStatIn = true;
 		do
 			{
-			num = input.nextInt();
 			System.out.println("How many points do you want in luck?");
+			num = input.nextInt();
 			if (num <= statTotal)
 				{
 				statTotal = statTotal-(num);

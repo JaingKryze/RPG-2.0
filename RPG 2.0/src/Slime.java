@@ -11,14 +11,14 @@ public class Slime extends Hostile
 		luck = 1;
 		mobAttackBehavior = new BasicAttack();
 		name = "Slime";
-		expDrop = 5;
+		expDrop = 20;
 		drops.add(new SmallHealthPotion());
 		dropChances.add(55.5);
-		drops.add(new TrainingSword());
-		dropChances.add(50.0);
-		drops.add(new LeatherArmor());
-		dropChances.add(50.0);
-		weapon = new NoWeapon();
-		armor = new NoArmor();
+		drops.add(new BeginnersSword());
+		dropChances.add(25.0);
+		drops.add(new ChainMail());
+		dropChances.add(25.0);	
+		weapon = new TrainingSword();
+		armor = new LeatherArmor();
 		}
 	}

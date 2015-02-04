@@ -6,7 +6,7 @@ public class BasicAttack implements AttackBehavior
 	public int attack(Mob a, Mob b) throws InterruptedException
 		{
 		int damage = 0;
-		damage = a.getWeapon().getAtk() + (a.getStr()*5) - (b.getArmor().getDef());
+		damage = a.getWeapon().getAtk() + (a.getStr()*3) - (b.getArmor().getDef());
 		
 		//dodge chance or eva based on luck and dxt
 		double rand = Math.random();
@@ -23,6 +23,10 @@ public class BasicAttack implements AttackBehavior
 			Thread.sleep(250);
 			System.out.println("Critical Hit");
 			damage = damage*2;
+			}
+		if(damage<0)
+			{
+			damage=0;
 			}
 		Thread.sleep(250);
 		if(a.getType().equals("player"))

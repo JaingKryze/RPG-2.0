@@ -16,8 +16,6 @@ public class PlayGame
 		{
 		do
 			{
-			Potion p = new SmallHealthPotion();
-			p.useItem();
 			//view inventory command
 			combat(player);
 			}
@@ -30,19 +28,21 @@ public class PlayGame
 		int dxt = 1;
 		int luck = 1;
 		int str = 1;
-		int statTotal = 8;
+		int statTotal = 6;
 		System.out.println("Name your character.");
 		Scanner input = new Scanner(System.in);
 		String name = input.nextLine();
-		System.out.println("You start with 8 stat points. You can put them into Vit (health), Str(attack power), Dxt(speed+dodge chance), and luck(critical hit chance + dodge chance).");
+		System.out.println("You start with 6 stat points. You can put them into Vit (health), Str(attack power), Dxt(speed+dodge chance), and luck(critical hit chance + dodge chance).");
 		boolean checkStatIn = true;
+		int num;
 		do
 			{
 			System.out.println("How many points do you want in Vit?");
-			vit = vit + input.nextInt();
-			if (vit-1 <= statTotal)
+			num = input.nextInt();
+			if (num <= statTotal)
 				{
-				statTotal = statTotal-(vit-1);
+			    vit = vit + num;
+				statTotal = statTotal-(num);
 				checkStatIn = true;
 				}
 			else
@@ -56,10 +56,11 @@ public class PlayGame
 		do
 			{
 			System.out.println("How many points do you want in Str?");
-			str = str + input.nextInt();
-			if (str-1 <= statTotal)
+			num = input.nextInt();
+			if (num <= statTotal)
 				{
-				statTotal = statTotal-(str-1);
+				str = str + num;
+				statTotal = statTotal-(num);
 				checkStatIn = true;
 				}
 			else
@@ -73,10 +74,11 @@ public class PlayGame
 		do
 			{
 			System.out.println("How many points do you want in Dxt?");
-			dxt = dxt + input.nextInt();
-			if (dxt-1 <= statTotal)
+			num = input.nextInt();
+			if (num <= statTotal)
 				{
-				statTotal = statTotal-(dxt-1);
+				dxt = dxt + num;
+				statTotal = statTotal-(num);
 				checkStatIn = true;
 				}
 			else
@@ -90,11 +92,12 @@ public class PlayGame
 		do
 			{
 			System.out.println("How many points do you want in luck?");
-			luck = luck + input.nextInt();
-			if (luck-1 <= statTotal)
+			num = input.nextInt();
+			if (num <= statTotal)
 				{
-				statTotal = statTotal-(luck-1);
+				statTotal = statTotal-(num);
 				checkStatIn = true;
+				luck = luck + num;
 				}
 			else
 				{
@@ -104,8 +107,7 @@ public class PlayGame
 			}
 		while(checkStatIn == false);
 		Item [] inventory = new Item[30];
-		while(checkStatIn == false);
-		int maxHp = vit*50 + 50;
+		int maxHp = vit*50;
 		return new Player(maxHp, maxHp, str, vit, dxt, luck, new BasicAttack(), name, 1, 0, 100, inventory, new LeatherArmor(), new TrainingSword());
 		}
 	public static void createMap()
@@ -124,12 +126,18 @@ public class PlayGame
 				enemy = new Slime();
 				break;
 				}
+			case 2:
+				{
+				enemy = new Skeleton();
+				break;
+				}
 			default:
 				{
-				enemy = new Slime();
+				enemy = new Skeleton();
 				break;
 				}
 			}
+		System.out.println("You encounter a " + enemy.getName());
 		System.out.println("The " + enemy.getName() + " has " + enemy.getCurrentHp() + " HP.");
 		System.out.println(player.getName() + " has " + player.getCurrentHp() + " HP.");
 		while(enemy.getCurrentHp()>0&&player.getCurrentHp()>0)
@@ -231,20 +239,22 @@ public class PlayGame
 			else if(i.getType()=="potion")
 				{
 				System.out.println(" Healing power: " + ((Potion)i).getHpRestore());
-				System.out.println("Would you like to add the " + i.getName() +" to your inventory type 1 for yes 2 for no.");
+				System.out.println("Would you like to use the " + i.getName() +" type 1 for yes 2 for no.");
+				//System.out.println("Would you like to add the " + i.getName() +" to your inventory type 1 for yes 2 for no.");
 				if(input.nextInt()==1)
 					{
-					//add error handling
-					Item[] inventory = player.getInventory();
-					for(int j = 0; j<30; j++)
-						{
-						if(inventory[j]==(null))
-							{
-							inventory[j] = i;
-							j=30;
-							player.setInventory(inventory);
-							}
-						}
+					i.useItem();
+//					//add error handling
+//					Item[] inventory = player.getInventory();
+//					for(int j = 0; j<30; j++)
+//						{
+//						if(inventory[j]==(null))
+//							{
+//							inventory[j] = i;
+//							j=30;
+//							player.setInventory(inventory);
+//							}
+//						}
 					}
 				}
 			
