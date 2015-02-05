@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.io.*;
 
 public class PlayGame
 	{
@@ -10,6 +10,7 @@ public class PlayGame
 	public static void main(String[] args) throws InterruptedException
 		{
 		player = createPlayer();
+		writeSave();
 		run();
 		}
 	public static void run() throws InterruptedException
@@ -17,7 +18,8 @@ public class PlayGame
 		do
 			{
 			//view inventory command
-			combat(player);
+			player = combat(player);
+			writeSave();
 			}
 		while(player.getCurrentHp()>0);
 		System.out.println("You died game over");
@@ -114,7 +116,7 @@ public class PlayGame
 		{
 		//make a basic map
 		}
-	public static void combat(Player player) throws InterruptedException
+	public static Player combat(Player player) throws InterruptedException
 		{
 		Scanner input = new Scanner(System.in);
 		Mob enemy;
@@ -257,7 +259,50 @@ public class PlayGame
 //						}
 					}
 				}
-			
+			}
+		return player;
+		}
+	public static void writeSave()
+		{
+        try {
+        	String fileName = "rpg2.0_save.txt";
+	        File file = new File(fileName);
+			if (!file.exists()) 
+				{
+				file.createNewFile();
+				}	
+            // Assume default encoding.
+            FileWriter fileWriter =
+                new FileWriter(file.getAbsoluteFile());
+
+            // Always wrap FileWriter in BufferedWriter.
+            BufferedWriter bufferedWriter =
+                new BufferedWriter(fileWriter);
+
+            // Note that write() does not automatically
+            // append a newline character.
+            bufferedWriter.write(player.getMaxHp());
+            bufferedWriter.write(" " + player.getCurrentHp());
+            bufferedWriter.write(" " + player.getStr());
+            bufferedWriter.write(" " + player.getVit());
+            bufferedWriter.write(" " + player.getDxt());
+            bufferedWriter.write(" " + player.getLuck());
+            bufferedWriter.write(" " + player.getMobAttackBehavior());
+            bufferedWriter.write(" " + player.getName());
+            bufferedWriter.write(" " + player.getLvl());
+            bufferedWriter.write(" " + player.getExp());
+            bufferedWriter.write(" " + player.getExpNeeded());
+            //bufferedWriter.write(" " + player.getInventory());
+            bufferedWriter.write(" " + player.getArmor().getName());
+            bufferedWriter.write(" " + player.getWeapon().getName());
+            // Always close files.
+            bufferedWriter.close();
+            System.out.println("Done");
+        	}
+        catch(IOException e) {
+            e.printStackTrace();
+            // Or we could just do this:
+            // ex.printStackTrace();
 			}
 		}
 	}

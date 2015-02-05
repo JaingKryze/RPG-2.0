@@ -24,7 +24,7 @@ public class Potion extends Item
 	@Override
 	public void useItem()
 		{
-		if(PlayGame.player.getMaxHp()+hpRestore > PlayGame.player.getVit()*50)
+		if(PlayGame.player.getCurrentHp()+hpRestore > PlayGame.player.getVit()*50)
 			{
 			PlayGame.player.setCurrentHp(PlayGame.player.getMaxHp());
 			}
