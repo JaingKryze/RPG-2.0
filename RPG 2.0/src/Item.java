@@ -5,10 +5,11 @@ public abstract class Item
 	protected String name;
 	protected int price;
 	protected AbilityBehavior itemAbilityBehavior = new noAbility();
-	public int sellItem()
+	public int sell()
 		{
 		//remove item from inventory
 		//add price to wallet
+		
 		return price;
 		}
 	public void useItem()

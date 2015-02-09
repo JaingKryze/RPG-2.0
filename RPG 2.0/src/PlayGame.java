@@ -9,7 +9,9 @@ public class PlayGame
 	public static Player player;
 	public static void main(String[] args) throws InterruptedException
 		{
-		player = createPlayer();
+		System.out.println("Welcome to my rpg.");
+		System.out.println("Warning attempts to break this game will be punished severly, this game will auto save.");
+		player = readFromFile();
 		writeSave();
 		run();
 		}
@@ -18,6 +20,7 @@ public class PlayGame
 		do
 			{
 			//view inventory command
+			viewMainMenu();
 			player = combat(player);
 			writeSave();
 			}
@@ -40,12 +43,13 @@ public class PlayGame
 		do
 			{
 			System.out.println("How many points do you want in Vit?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			num = input.hasNextInt() ? input.nextInt():0;
+			if (num <= statTotal && num>=0)
 				{
 			    vit = vit + num;
 				statTotal = statTotal-(num);
 				checkStatIn = true;
+				System.out.println("You put " + num + " points in vit.");
 				}
 			else
 				{
@@ -54,16 +58,19 @@ public class PlayGame
 				}
 			}
 		while(checkStatIn == false);
+		input.reset();
 		checkStatIn = true;
 		do
 			{
 			System.out.println("How many points do you want in Str?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
+			if (num <= statTotal && num>=0)
 				{
 				str = str + num;
 				statTotal = statTotal-(num);
 				checkStatIn = true;
+				System.out.println("You put " + num + " points in str.");
 				}
 			else
 				{
@@ -76,12 +83,14 @@ public class PlayGame
 		do
 			{
 			System.out.println("How many points do you want in Dxt?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
+			if (num <= statTotal && num >=0)
 				{
 				dxt = dxt + num;
 				statTotal = statTotal-(num);
 				checkStatIn = true;
+				System.out.println("You put " + num + " points in dxt.");
 				}
 			else
 				{
@@ -94,12 +103,14 @@ public class PlayGame
 		do
 			{
 			System.out.println("How many points do you want in luck?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
+			if (num <= statTotal && num>=0)
 				{
 				statTotal = statTotal-(num);
 				checkStatIn = true;
 				luck = luck + num;
+				System.out.println("You put " + num + " points in luck.");
 				}
 			else
 				{
@@ -125,7 +136,25 @@ public class PlayGame
 			{
 			case 1:
 				{
-				enemy = new Slime();
+				double rand = Math.random();
+				if(rand>=.5)
+					{
+					enemy = new Slime();
+					}
+				else if(rand<.1)
+					{
+					village();
+					System.out.println("The villagers let you rest in their village for the night.");
+					System.out.println("You leave the village feeling rested");
+					new SmallHealthPotion().useItem();
+					new SmallHealthPotion().useItem();
+					new SmallHealthPotion().useItem();
+					return player;
+					}
+				else
+					{
+					enemy = new Wolf();
+					}
 				break;
 				}
 			case 2:
@@ -140,8 +169,11 @@ public class PlayGame
 				}
 			}
 		System.out.println("You encounter a " + enemy.getName());
+		Thread.sleep(100);
 		System.out.println("The " + enemy.getName() + " has " + enemy.getCurrentHp() + " HP.");
+		Thread.sleep(100);
 		System.out.println(player.getName() + " has " + player.getCurrentHp() + " HP.");
+		Thread.sleep(100);
 		while(enemy.getCurrentHp()>0&&player.getCurrentHp()>0)
 			{
 			if(player.getDxt()>=enemy.getDxt())
@@ -150,8 +182,8 @@ public class PlayGame
 				do
 					{
 					System.out.println("What skill would you like to use (enter the number). (1) basic attack. (2) killing strike.");
-					Scanner askSkill = new Scanner(System.in);
-					skill = askSkill.nextInt();
+					Scanner input2 = new Scanner(System.in);
+					skill = input2.hasNextInt() ? input2.nextInt():0;
 					if (!(skill>=1)||!(skill<=2))
 						{
 						System.out.println("Please select a valid skill.");
@@ -168,6 +200,7 @@ public class PlayGame
 					case 2:
 						{
 						player.setMobAttackBehavior((AttackBehavior) new KillingStrike());
+						break;
 						}
 					}
 				player.performAttack(player, enemy);
@@ -185,8 +218,8 @@ public class PlayGame
 					do
 						{
 						System.out.println("What skill would you like to use (enter the number). (1) basic attack. (2) killing strike.");
-						Scanner askSkill = new Scanner(System.in);
-						skill = askSkill.nextInt();
+						Scanner input2 = new Scanner(System.in);
+						skill = input2.hasNextInt() ? input2.nextInt():0;
 						if (!(skill>=1)||!(skill<=2))
 							{
 							System.out.println("Please select a valid skill.");
@@ -213,6 +246,9 @@ public class PlayGame
 			{
 			player.setExp(player.getExp()+((Hostile)enemy).getExpDrop());
 			drops = ((Hostile)enemy).generateDrops((Hostile)enemy);
+			System.out.println("You have defeated the " + enemy.getName());
+			System.out.println("Your current exp is " + player.getExp() + "/" + player.getExpNeeded());
+			Thread.sleep(1000);
 			}
 		for(Item i: drops)
 			{
@@ -223,9 +259,16 @@ public class PlayGame
 				System.out.println(" Attack Power: " + ((Weapon)i).getAtk());
 				System.out.println("Your current weapon has an Attack Power of " + player.getWeapon().getAtk());
 				System.out.println("Would you like to equip the " + i.getName() +" type 1 for yes 2 for no.");
-				if(input.nextInt()==1)
+				int num;
+				Scanner input2 = new Scanner(System.in);
+				num = input2.hasNextInt() ? input2.nextInt():0;
+				if(num==1)
 					{
 					player.setWeapon((Weapon) i);
+					}
+				else
+					{
+					player.setWallet(player.getWallet() + i.sell());
 					}
 				}
 			else if(i.getType()=="armor")
@@ -233,9 +276,16 @@ public class PlayGame
 				System.out.println(" Defense: " + ((Armor)i).getDef());
 				System.out.println("Your current armor has a defense of " + player.getArmor().getDef());
 				System.out.println("Would you like to equip the " + i.getName() +" type 1 for yes 2 for no.");
-				if(input.nextInt()==1)
+				int num;
+				Scanner input2 = new Scanner(System.in);
+				num = input2.hasNextInt() ? input2.nextInt():0;
+				if(num==1)
 					{
 					player.setArmor((Armor) i);
+					}
+				else
+					{
+					player.setWallet(player.getWallet() + i.sell());
 					}
 				}
 			else if(i.getType()=="potion")
@@ -243,7 +293,10 @@ public class PlayGame
 				System.out.println(" Healing power: " + ((Potion)i).getHpRestore());
 				System.out.println("Would you like to use the " + i.getName() +" type 1 for yes 2 for no.");
 				//System.out.println("Would you like to add the " + i.getName() +" to your inventory type 1 for yes 2 for no.");
-				if(input.nextInt()==1)
+				int num;
+				Scanner input2 = new Scanner(System.in);
+				num = input2.hasNextInt() ? input2.nextInt():0;
+				if(num==1)
 					{
 					i.useItem();
 //					//add error handling
@@ -257,6 +310,10 @@ public class PlayGame
 //							player.setInventory(inventory);
 //							}
 //						}
+					}
+				else
+					{
+					player.setWallet(player.getWallet() + i.sell());
 					}
 				}
 			}
@@ -281,28 +338,181 @@ public class PlayGame
 
             // Note that write() does not automatically
             // append a newline character.
-            bufferedWriter.write(player.getMaxHp());
+            if(player.getCurrentHp()>0)
+            	{
+            	bufferedWriter.write(" " + 1);
+            	}
+            else
+            	{
+            	bufferedWriter.write(" " + -1);
+            	}
+            bufferedWriter.newLine();
+            bufferedWriter.write(" " + player.getMaxHp());
             bufferedWriter.write(" " + player.getCurrentHp());
             bufferedWriter.write(" " + player.getStr());
             bufferedWriter.write(" " + player.getVit());
             bufferedWriter.write(" " + player.getDxt());
             bufferedWriter.write(" " + player.getLuck());
-            bufferedWriter.write(" " + player.getMobAttackBehavior());
             bufferedWriter.write(" " + player.getName());
             bufferedWriter.write(" " + player.getLvl());
             bufferedWriter.write(" " + player.getExp());
             bufferedWriter.write(" " + player.getExpNeeded());
             //bufferedWriter.write(" " + player.getInventory());
+            bufferedWriter.newLine();
             bufferedWriter.write(" " + player.getArmor().getName());
+            bufferedWriter.newLine();
             bufferedWriter.write(" " + player.getWeapon().getName());
             // Always close files.
             bufferedWriter.close();
-            System.out.println("Done");
+            System.out.println("Saved");
         	}
         catch(IOException e) {
             e.printStackTrace();
             // Or we could just do this:
             // ex.printStackTrace();
 			}
+		}
+	public static Player readFromFile() throws InterruptedException
+		{
+		 String fileName = "rpg2.0_save.txt";
+
+	        // This will reference one line at a time
+	        String line = null;
+	        String a;
+	        String w;
+	        Armor armor;
+	        Weapon weapon;
+//	        File file = new File(fileName);
+	        try {
+	            // FileReader reads text files in the default encoding.
+	            FileReader fileReader = 
+	                new FileReader(fileName);
+
+	            // Always wrap FileReader in BufferedReader.
+	            BufferedReader bufferedReader = 
+	                new BufferedReader(fileReader);
+	            if((bufferedReader.readLine()).equals(" 1"))
+	            	{
+	            	Scanner input = new Scanner(System.in);
+	            	System.out.println("Save data detected would you like to load? (1) yes (2) no");
+	            	if(input.nextLine().equals("1"))
+	            		{
+	            		
+	            		}
+	            	else
+	            		{
+	            		return PlayGame.createPlayer();
+	            		}
+	            	line = bufferedReader.readLine();
+	                String[] l = line.split(" ");
+	                a = bufferedReader.readLine();
+	                if(a.equals(" Chain Mail"))
+	                	{
+	                	armor = new ChainMail();
+	                	}
+	                else
+	                	{
+	                	armor = new LeatherArmor();
+	                	}
+	                w= bufferedReader.readLine();
+	                if(w.equals(" Beginners Sword"))
+	                	{
+	                	weapon = new BeginnersSword();
+	                	}
+	                else
+	                	{
+	                	weapon = new TrainingSword();
+	                	}
+	                AttackBehavior ab = new BasicAttack();
+	                Item [] inventory = new Item[30];
+	                bufferedReader.close();
+	                System.out.println("Welcome back " + l[7]);
+	                return new Player(Integer.parseInt(l[1]), Integer.parseInt(l[2]), Integer.parseInt(l[3]), Integer.parseInt(l[4]), Integer.parseInt(l[5]), Integer.parseInt(l[6]), ab, l[7], Integer.parseInt(l[8]), Integer.parseInt(l[9]), Integer.parseInt(l[10]), inventory, armor, weapon);
+	            	}
+
+	            // Always close files.
+	            bufferedReader.close();			
+	        }
+	        catch(FileNotFoundException ex) {
+	            System.out.println(
+	                "Unable to open file '" + 
+	                fileName + "'");				
+	        }
+	        catch(IOException ex) {
+	            System.out.println(
+	                "Error reading file '" 
+	                + fileName + "'");					
+	            // Or we could just do this: 
+	            // ex.printStackTrace();
+	        }
+	        return createPlayer();
+		}
+	public static void viewMainMenu()
+		{
+		System.out.println("Would you like to view the menu? (1) yes (2) no");
+		int num;
+		Scanner input2 = new Scanner(System.in);
+		num = input2.hasNextInt() ? input2.nextInt():0;
+		if(num==1)
+			{
+			System.out.println("Type your selection");
+			System.out.println("(1) View Stats");
+			System.out.println("(2) View Armor");
+			System.out.println("(3) View Weapon");
+			System.out.println("(4) Return");
+			//implement options 2 and 3
+			Scanner input3 = new Scanner(System.in);
+			num = input3.hasNextInt() ? input3.nextInt():0;
+			if(num==1)
+				{
+				viewStats();
+				}
+			else
+				{
+				System.out.println("You will now exit the menu.");
+				}
+			}
+		else
+			{
+			System.out.println("Ok");
+			}
+		return;
+		}
+	public static void viewStats()
+		{
+		System.out.println("Vit:" + player.getVit());
+		System.out.println("Str:" + player.getStr());
+		System.out.println("Dxt:" + player.getDxt());
+		System.out.println("Luck:" + player.getLuck());
+		viewMainMenu();
+		}
+	public static void village()
+		{
+		System.out.println("You encounter a village.");
+		System.out.println("You have " + player.getWallet() + " gold from items you sold.");
+		System.out.println("Would you like to refine your (1)weapon(cost: " + player.getWeapon().getPrice()+") or (2)armor(cost: "+ player.getArmor().getPrice()+"). (type 3 to leave)");
+		int num;
+		Scanner input2 = new Scanner(System.in);
+		num = input2.hasNextInt() ? input2.nextInt():-1;
+		if(num==1)
+			{
+			player.getWeapon().setAtk(player.getWeapon().getAtk()+1);
+			player.getWeapon().setPrice(player.getWeapon().getPrice()*2);
+			System.out.println("You have refined your " + player.getWeapon().getName());
+			}
+		else if(num==2)
+			{
+			player.getArmor().setDef(player.getArmor().getDef()+1);
+			player.getArmor().setPrice(player.getArmor().getPrice()*2);
+			System.out.println("You have refined your " + player.getArmor().getName());
+			}
+		else if(num==-1)
+			{
+			System.out.println("The villagers grow angry at your attempts to break this magnificent game.");
+			System.out.println("They break your weapon and armor in retaliation");
+			player.setArmor(new NoArmor());
+			player.setWeapon(new NoWeapon());
+			}
+		System.out.println("You decide to leave the village");
 		}
 	}

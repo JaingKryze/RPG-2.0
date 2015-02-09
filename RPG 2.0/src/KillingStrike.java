@@ -52,9 +52,8 @@ public class KillingStrike implements AttackBehavior
 		if(b.getCurrentHp()>0&&damage!=0)
 			{
 			Thread.sleep(250);
-			System.out.println("The attack failed to kill " + b.getName() + ", " + b.getName() + " counter attacks twice.");
+			System.out.println("The attack failed to kill " + b.getName() + ", " + b.getName() + " counter attacks.");
 			Thread.sleep(250);
-			b.performAttack(b, a);
 			b.performAttack(b, a);
 			}
 		Thread.sleep(250);

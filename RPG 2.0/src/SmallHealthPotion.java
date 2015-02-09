@@ -3,7 +3,7 @@ public class SmallHealthPotion extends Potion
 	{
 	public SmallHealthPotion()
 		{
-		hpRestore = 20;
+		hpRestore = 10;
 		name = "Small Health Potion";
 		price = 10;
 		}

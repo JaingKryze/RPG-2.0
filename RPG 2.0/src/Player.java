@@ -6,8 +6,18 @@ public class Player extends Mob
 	protected int exp;
 	protected int expNeeded;
 	protected Item[] inventory = new Item[30];
+	protected int wallet;
+	public int getWallet()
+		{
+		return wallet;
+		}
+	public void setWallet(int wallet)
+		{
+		this.wallet = wallet;
+		}
 	public Player(int mHp, int cHp, int s, int v, int d, int l, AttackBehavior aB, String n, int lv, int xp, int xpN, Item[] i, Armor a, Weapon w)
 		{
+		wallet = 0;
 		type = "player";
 		maxHp = v*50;
 		currentHp = cHp;
@@ -75,12 +85,14 @@ public class Player extends Mob
 		do
 			{
 			System.out.println("How many points do you want in Vit?");
-			num = input.nextInt();
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
 			if (num <= statTotal)
 				{
 			    vit = vit + num;
 				statTotal = statTotal-(num);
 				checkStatIn = true;
+				System.out.println("You put " + num + " points in vit");
 				}
 			else
 				{
@@ -93,12 +105,14 @@ public class Player extends Mob
 		do
 			{
 			System.out.println("How many points do you want in Str?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
+			if (num <= statTotal && num>= 0)
 				{
 				str = str + num;
 				statTotal = statTotal-(num);
 				checkStatIn = true;
+				System.out.println("You put " + num + " points in str");
 				}
 			else
 				{
@@ -111,12 +125,14 @@ public class Player extends Mob
 		do
 			{
 			System.out.println("How many points do you want in Dxt?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
+			if (num <= statTotal && num>= 0)
 				{
 				dxt = dxt + num;
 				statTotal = statTotal-(num);
 				checkStatIn = true;
+				System.out.println("You put " + num + " points in dxt");
 				}
 			else
 				{
@@ -129,12 +145,14 @@ public class Player extends Mob
 		do
 			{
 			System.out.println("How many points do you want in luck?");
-			num = input.nextInt();
-			if (num <= statTotal)
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():0;
+			if (num <= statTotal && num>= 0)
 				{
 				statTotal = statTotal-(num);
 				checkStatIn = true;
 				luck = luck + num;
+				System.out.println("You put " + num + " points in luck");
 				}
 			else
 				{

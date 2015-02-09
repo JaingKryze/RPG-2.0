@@ -1,1 +1,4 @@
-È 200 4 4 1 1 BasicAttack@1ab28fe jared 1 0 100 Leather Armor Training Sword
+ 1
+ 150 97 3 3 2 2 jard 1 60 100
+ Chain Mail
+ Beginners Sword
