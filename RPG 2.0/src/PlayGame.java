@@ -7,10 +7,14 @@ public class PlayGame
 	private static int yesNo;
 	private static boolean reset;
 	public static Player player;
+	public static int x = 0;
+	public static int y = 0;
+	public static Location[][] map;
 	public static void main(String[] args) throws InterruptedException
 		{
 		System.out.println("Welcome to my rpg.");
 		System.out.println("Warning attempts to break this game will be punished severly, this game will auto save.");
+		map = createMap();
 		player = readFromFile();
 		writeSave();
 		run();
@@ -26,6 +30,95 @@ public class PlayGame
 			}
 		while(player.getCurrentHp()>0);
 		System.out.println("You died game over");
+		}
+	public static void displayNearByMap(Location[][] map)
+		{
+		for(int i = -1; i<2; i++)
+			{
+			for(int j = -1; j<2; j++)
+				{
+				if((x+i)>=0&&(y+j)>=0&&map[i][j]!=(null))
+					{
+					System.out.printf("%15s", map[x+i][y+j].getName());
+					}
+				else
+					{
+					System.out.printf("%15s", "empty");
+					}
+				}
+			System.out.println();
+			}
+		}
+	public static void	movement() throws InterruptedException
+		{
+		boolean north = false;
+		boolean south = false;
+		boolean east = false;
+		boolean west = false;
+		int movesToMake = map[x][y].getLength();
+		for(movesToMake= map[x][y].getLength(); movesToMake>0; movesToMake--)
+			{
+			combat(player);
+			}
+		if(movesToMake==0)
+			{
+			boolean dir = true;
+			do
+				{
+				String direction;
+				displayNearByMap(map);
+				System.out.print("Would you like to move ");
+				if(y-1>=0 && map[x][y-1]!=null)
+					{
+					System.out.print(" north");
+					north = true;
+					}
+				if(y+1>=0 && map[x][y+1]!=null)
+					{
+					System.out.print(" south");
+					south = true;
+					}
+				if(x-1>=0 && map[x-1][y]!=null)
+					{
+					System.out.print(" east");
+					east = true;
+					}
+				if(x-1>=0 && map[x-1][y]!=null)
+					{
+					System.out.print(" west");
+					west = true;
+					}
+				System.out.println();
+				Scanner input = new Scanner(System.in);
+				direction=input.nextLine().toLowerCase();
+				if(input.equals("north")&&north==true)
+					{
+					y--;
+					dir = true;
+					}
+				else if(input.equals("south")&&south==true)
+					{
+					y++;
+					dir = true;
+					}
+				else if(input.equals("east")&&east==true)
+					{
+					x--;
+					dir = true;
+					}
+				else if(input.equals("west")&&west==true)
+					{
+					x++;
+					dir = true;
+					}
+				else
+					{
+					System.out.println("Please make sure your input was typed correctly it could not be recognized, include no spaces and correct spelling.");
+					dir = false;
+					}
+				}
+			while(dir==false);
+			}
 		}
 	public static Player createPlayer() throws InterruptedException
 		{
@@ -123,12 +216,27 @@ public class PlayGame
 		int maxHp = vit*50;
 		return new Player(maxHp, maxHp, str, vit, dxt, luck, new BasicAttack(), name, 1, 0, 100, inventory, new LeatherArmor(), new TrainingSword());
 		}
-	public static void createMap()
+	public static Location[][] createMap()
 		{
-		//make a basic map
+		Location[][] map = new Location[5][5];
+		map[0][0] = new Location("Village", 0 , 0, true);
+		map[0][1] = new Location("Field", 1, 5, false);
+		map[1][0] = new Location("Field", 1, 5, false);
+		map[2][0] = new Location("Field", 1, 5, false);
+		map[2][1] = new Location("Village", 0, 0, false);
+		map[1][2] = new Location("Forest", 2, 5, false);
+		map[0][3] = new Location("Cave", 3, 5, false);
+		map[1][3] = new Location("Dungeon", 4, 1, false);
+		return map;
 		}
 	public static Player combat(Player player) throws InterruptedException
 		{
+		double v = Math.random();
+		if(v<=.1)
+			{
+			village();
+			return player;
+			}
 		Scanner input = new Scanner(System.in);
 		Mob enemy;
 		ArrayList<Item> drops = new ArrayList<Item>(); 
@@ -140,16 +248,6 @@ public class PlayGame
 				if(rand>=.5)
 					{
 					enemy = new Slime();
-					}
-				else if(rand<.1)
-					{
-					village();
-					System.out.println("The villagers let you rest in their village for the night.");
-					System.out.println("You leave the village feeling rested");
-					new SmallHealthPotion().useItem();
-					new SmallHealthPotion().useItem();
-					new SmallHealthPotion().useItem();
-					return player;
 					}
 				else
 					{
@@ -467,6 +565,14 @@ public class PlayGame
 				{
 				viewStats();
 				}
+			else if(num==2)
+				{
+				viewArmor();
+				}
+			else if(num==3)
+				{
+				viewWeapon();
+				}
 			else
 				{
 				System.out.println("You will now exit the menu.");
@@ -480,39 +586,89 @@ public class PlayGame
 		}
 	public static void viewStats()
 		{
+		System.out.println("HP: " + player.getCurrentHp()+ "/" + player.getMaxHp());
 		System.out.println("Vit:" + player.getVit());
 		System.out.println("Str:" + player.getStr());
 		System.out.println("Dxt:" + player.getDxt());
 		System.out.println("Luck:" + player.getLuck());
 		viewMainMenu();
 		}
+	public static void viewArmor()
+		{
+		System.out.println("Def: " + player.getArmor().getDef());
+		System.out.println("Price: " + player.getArmor().getPrice());
+		viewMainMenu();
+		}
+	public static void viewWeapon()
+		{
+		System.out.println("Atk: " + player.getWeapon().getAtk());
+		System.out.println("Price: " + player.getWeapon().getPrice());
+		viewMainMenu();
+		}
 	public static void village()
 		{
+		boolean leave = false;
+		int num;
 		System.out.println("You encounter a village.");
 		System.out.println("You have " + player.getWallet() + " gold from items you sold.");
-		System.out.println("Would you like to refine your (1)weapon(cost: " + player.getWeapon().getPrice()+") or (2)armor(cost: "+ player.getArmor().getPrice()+"). (type 3 to leave)");
-		int num;
-		Scanner input2 = new Scanner(System.in);
-		num = input2.hasNextInt() ? input2.nextInt():-1;
-		if(num==1)
+		do
 			{
-			player.getWeapon().setAtk(player.getWeapon().getAtk()+1);
-			player.getWeapon().setPrice(player.getWeapon().getPrice()*2);
-			System.out.println("You have refined your " + player.getWeapon().getName());
+			System.out.println("Would you like to refine your (1)weapon(cost: " + player.getWeapon().getPrice()+") or (2)armor(cost: "+ player.getArmor().getPrice()+"). (type 3 to leave)");
+			Scanner input2 = new Scanner(System.in);
+			num = input2.hasNextInt() ? input2.nextInt():-1;
+			if(num==1)
+				{
+				if(player.getWallet()>player.getWeapon().getPrice())
+					{
+					player.setWallet(player.getWallet()-player.getWeapon().getPrice());
+					player.getWeapon().setAtk(player.getWeapon().getAtk()+1);
+					player.getWeapon().setPrice(player.getWeapon().getPrice()*2);
+					System.out.println("You have refined your " + player.getWeapon().getName());
+					}
+				else
+					{
+					System.out.println("You only have " + player.getWallet() + " gold.");
+					}
+				}
+			else if(num==2)
+				{
+				if(player.getWallet()>player.getArmor().getPrice())
+					{
+					player.setWallet(player.getWallet()-player.getArmor().getPrice());
+					player.getArmor().setDef(player.getArmor().getDef()+1);
+					player.getArmor().setPrice(player.getArmor().getPrice()*2);
+					System.out.println("You have refined your " + player.getArmor().getName());
+					}
+				else
+					{
+					System.out.println("You only have " + player.getWallet() + " gold.");
+					}
+				}
+			else if(num==-1)
+				{
+				System.out.println("The villagers grow angry at your attempts to break this magnificent game.");
+				System.out.println("They break your weapon and armor in retaliation");
+				player.setArmor(new NoArmor());
+				player.setWeapon(new NoWeapon());
+				leave = true;
+				}
+			else
+				{
+				leave = true;
+				}
 			}
-		else if(num==2)
+		while(leave==false);
+		if(num!=-1)
 			{
-			player.getArmor().setDef(player.getArmor().getDef()+1);
-			player.getArmor().setPrice(player.getArmor().getPrice()*2);
-			System.out.println("You have refined your " + player.getArmor().getName());
+			System.out.println("The villagers let you rest in their village for the night.");
+			System.out.println("You leave the village feeling rested");
+			new SmallHealthPotion().useItem();
+			new SmallHealthPotion().useItem();
+			new SmallHealthPotion().useItem();
 			}
-		else if(num==-1)
+		else
 			{
-			System.out.println("The villagers grow angry at your attempts to break this magnificent game.");
-			System.out.println("They break your weapon and armor in retaliation");
-			player.setArmor(new NoArmor());
-			player.setWeapon(new NoWeapon());
+			System.out.println("You decide to leave the village");
 			}
-		System.out.println("You decide to leave the village");
 		}
 	}
