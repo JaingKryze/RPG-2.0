@@ -5,10 +5,10 @@ public class KillingStrike implements AttackBehavior
 	public int attack(Mob a, Mob b) throws InterruptedException
 		{
 		int damage = 0;
-		damage = a.getWeapon().getAtk()*2 + (a.getStr()*3) - (b.getArmor().getDef());
+		damage = (int)(a.getWeapon().getAtk()*2.5) + (a.getStr()*4) - (b.getArmor().getDef());
 		//dodge chance or eva based on luck and dxt
 		double rand = Math.random();
-		if(rand<((double)(b.getLuck()*.01)+(double)(b.getDxt()*.002)+.1))
+		if(rand<((double)(b.getLuck()*.01)+(double)(b.getDxt()*.002)+.05))
 			{
 			Thread.sleep(250);
 			System.out.println("Attack Dodged");
@@ -16,14 +16,14 @@ public class KillingStrike implements AttackBehavior
 			}
 		rand = Math.random();
 		//crit chance
-		if(rand<((double)(b.getLuck()*.02)+.1))
+		if(rand<((double)(b.getLuck()*.02)+.2))
 			{
 			Thread.sleep(250);
 			System.out.println("Critical Hit");
 			damage = damage*2;
 			}
 		rand = Math.random();
-		if(rand<.25)
+		if(rand<.1)
 			{
 			Thread.sleep(250);
 			damage = 0;

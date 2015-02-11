@@ -5,6 +5,6 @@ public LeatherArmor()
 	{
 	name = "Leather Armor";
 	price = 1;
-	def = 1;
+	def = 2;
 	}
 }

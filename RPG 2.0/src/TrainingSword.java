@@ -5,7 +5,7 @@ public class TrainingSword extends Weapon
 		{
 		//calls the super method a little pointless since it isnt really needed
 		super();
-		atk = 5;
+		atk = 3;
 		name = "Training Sword";
 		price = 1;
 		}

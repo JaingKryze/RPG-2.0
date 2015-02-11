@@ -4,8 +4,7 @@ import java.io.*;
 
 public class PlayGame
 	{
-	private static int yesNo;
-	private static boolean reset;
+	public static boolean start = true;
 	public static Player player;
 	public static int x = 0;
 	public static int y = 0;
@@ -21,11 +20,16 @@ public class PlayGame
 		}
 	public static void run() throws InterruptedException
 		{
+		if(!map[y][x].getName().equals("Village"))
+			{
+			movement();
+			}
 		do
 			{
 			//view inventory command
 			viewMainMenu();
-			player = combat(player);
+			movement();
+//			player = combat(player);
 			writeSave();
 			}
 		while(player.getCurrentHp()>0);
@@ -37,13 +41,13 @@ public class PlayGame
 			{
 			for(int j = -1; j<2; j++)
 				{
-				if((x+i)>=0&&(y+j)>=0&&map[i][j]!=(null))
+				if((y+i)>=0&&(x+j)>=0&&map[y+i][x+j]!=(null))
 					{
-					System.out.printf("%15s", map[x+i][y+j].getName());
+					System.out.printf("%15s", map[y+i][x+j].getName());
 					}
 				else
 					{
-					System.out.printf("%15s", "empty");
+					System.out.printf("%15s", "------");
 					}
 				}
 			System.out.println();
@@ -55,70 +59,95 @@ public class PlayGame
 		boolean south = false;
 		boolean east = false;
 		boolean west = false;
-		int movesToMake = map[x][y].getLength();
-		for(movesToMake= map[x][y].getLength(); movesToMake>0; movesToMake--)
+		int movesToMake = map[y][x].getLength();
+		if(start==true)
 			{
-			combat(player);
+			
 			}
-		if(movesToMake==0)
+		else
 			{
-			boolean dir = true;
-			do
+			for(movesToMake= map[y][x].getLength(); movesToMake>0; movesToMake--)
 				{
-				String direction;
-				displayNearByMap(map);
-				System.out.print("Would you like to move ");
-				if(y-1>=0 && map[x][y-1]!=null)
+				combat(player);
+				if(player.getCurrentHp()>=0)
 					{
-					System.out.print(" north");
-					north = true;
-					}
-				if(y+1>=0 && map[x][y+1]!=null)
-					{
-					System.out.print(" south");
-					south = true;
-					}
-				if(x-1>=0 && map[x-1][y]!=null)
-					{
-					System.out.print(" east");
-					east = true;
-					}
-				if(x-1>=0 && map[x-1][y]!=null)
-					{
-					System.out.print(" west");
-					west = true;
-					}
-				System.out.println();
-				Scanner input = new Scanner(System.in);
-				direction=input.nextLine().toLowerCase();
-				if(input.equals("north")&&north==true)
-					{
-					y--;
-					dir = true;
-					}
-				else if(input.equals("south")&&south==true)
-					{
-					y++;
-					dir = true;
-					}
-				else if(input.equals("east")&&east==true)
-					{
-					x--;
-					dir = true;
-					}
-				else if(input.equals("west")&&west==true)
-					{
-					x++;
-					dir = true;
-					}
-				else
-					{
-					System.out.println("Please make sure your input was typed correctly it could not be recognized, include no spaces and correct spelling.");
-					dir = false;
+					return;
 					}
 				}
-			while(dir==false);
 			}
+		if(map[y][x].getName().equals("Village"))
+			{
+			village();
+			}
+		else if(start==true)
+			{
+			
+			}
+		else
+			{
+			System.out.println("You have defeated all enemies in the area (enemys will respawn).");
+			}
+		boolean dir = true;
+		do
+			{
+			String direction;
+			displayNearByMap(map);
+			System.out.print("Would you like to move (type the word with no spaces)");
+			if(y-1>=0 && map[y-1][x]!=null)
+				{
+				System.out.print(" north,");
+				north = true;
+				}
+			if(y+1>=0 && map[y+1][x]!=null)
+				{
+				System.out.print(" south,");
+				south = true;
+				}
+			if(x-1>=0 && map[y][x-1]!=null)
+				{
+				System.out.print(" east,");
+				east = true;
+				}
+			if(x+1>=0 && map[y][x+1]!=null)
+				{
+				System.out.print(" west,");
+				west = true;
+				}
+			System.out.println(" or type 0 to stay here");
+			Scanner input = new Scanner(System.in);
+			direction=input.nextLine().toLowerCase();
+			if(direction.equals("north")&&north==true)
+				{
+				y--;
+				dir = true;
+				}
+			else if(direction.equals("south")&&south==true)
+				{
+				y++;
+				dir = true;
+				}
+			else if(direction.equals("east")&&east==true)
+				{
+				x--;
+				dir = true;
+				}
+			else if(direction.equals("west")&&west==true)
+				{
+				x++;
+				dir = true;
+				}
+			else if(direction.equals("0"))
+				{
+				dir = true;
+				}
+			else
+				{
+				System.out.println("Please make sure your input was typed correctly it could not be recognized, include no spaces and correct spelling.");
+				dir = false;
+				}
+			}
+		while(dir==false);
+		start = false;
 		}
 	public static Player createPlayer() throws InterruptedException
 		{
@@ -224,23 +253,25 @@ public class PlayGame
 		map[1][0] = new Location("Field", 1, 5, false);
 		map[2][0] = new Location("Field", 1, 5, false);
 		map[2][1] = new Location("Village", 0, 0, false);
+		map[0][2] = new Location("Field", 1, 3, false);
 		map[1][2] = new Location("Forest", 2, 5, false);
+		map[2][2] = new Location("Village", 0, 0, false);
 		map[0][3] = new Location("Cave", 3, 5, false);
 		map[1][3] = new Location("Dungeon", 4, 1, false);
 		return map;
 		}
 	public static Player combat(Player player) throws InterruptedException
 		{
-		double v = Math.random();
-		if(v<=.1)
-			{
-			village();
-			return player;
-			}
-		Scanner input = new Scanner(System.in);
+//		double v = Math.random();
+//		if(v<=.1)
+//			{
+//			village();
+//			return player;
+//			}
+//		Scanner input = new Scanner(System.in);
 		Mob enemy;
 		ArrayList<Item> drops = new ArrayList<Item>(); 
-		switch(player.getLvl())
+		switch(/*player.getLvl()*/map[x][y].getLvl())
 			{
 			case 1:
 				{
@@ -460,6 +491,8 @@ public class PlayGame
             bufferedWriter.write(" " + player.getArmor().getName());
             bufferedWriter.newLine();
             bufferedWriter.write(" " + player.getWeapon().getName());
+            bufferedWriter.newLine();
+            bufferedWriter.write(" " + x + " " + y);
             // Always close files.
             bufferedWriter.close();
             System.out.println("Saved");
@@ -521,6 +554,10 @@ public class PlayGame
 	                	{
 	                	weapon = new TrainingSword();
 	                	}
+	                String p = bufferedReader.readLine();
+	                String[] pos = p.split(" ");
+	                x = Integer.parseInt(pos[1]);
+	                y = Integer.parseInt(pos[2]);
 	                AttackBehavior ab = new BasicAttack();
 	                Item [] inventory = new Item[30];
 	                bufferedReader.close();
@@ -609,7 +646,7 @@ public class PlayGame
 		{
 		boolean leave = false;
 		int num;
-		System.out.println("You encounter a village.");
+		System.out.println("You enter the village.");
 		System.out.println("You have " + player.getWallet() + " gold from items you sold.");
 		do
 			{
@@ -660,11 +697,11 @@ public class PlayGame
 		while(leave==false);
 		if(num!=-1)
 			{
+			new SmallHealthPotion().useItem();
+			new SmallHealthPotion().useItem();
+			new SmallHealthPotion().useItem();
 			System.out.println("The villagers let you rest in their village for the night.");
-			System.out.println("You leave the village feeling rested");
-			new SmallHealthPotion().useItem();
-			new SmallHealthPotion().useItem();
-			new SmallHealthPotion().useItem();
+			System.out.println("You leave the village feeling rested HP:" +player.getCurrentHp()/player.getMaxHp());
 			}
 		else
 			{

@@ -5,6 +5,6 @@ public class ChainMail extends Armor
 		{
 		name = "Chain Mail";
 		price = 100;
-		def = 3;
+		def = 4;
 		}
 	}

@@ -5,7 +5,7 @@ public class Wolf extends Hostile
 		{
 		maxHp = 30;
 		currentHp = 30;
-		str = 5;
+		str = 4;
 		vit = 1;
 		dxt = 3;
 		luck = 2;
@@ -13,7 +13,7 @@ public class Wolf extends Hostile
 		name = "Wolf";
 		expDrop = 20;
 		drops.add(new SmallHealthPotion());
-		dropChances.add(55.5);
+		dropChances.add(60.5);
 		drops.add(new BeginnersSword());
 		dropChances.add(25.0);	
 		drops.add(new Eludicator());
