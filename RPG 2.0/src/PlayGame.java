@@ -59,14 +59,14 @@ public class PlayGame
 		boolean south = false;
 		boolean east = false;
 		boolean west = false;
-		int movesToMake = map[y][x].getLength();
+//		int movesToMake = map[y][x].getLength();
 		if(start==true)
 			{
 			
 			}
 		else
 			{
-			for(movesToMake= map[y][x].getLength(); movesToMake>0; movesToMake--)
+			for(int movesToMake= map[y][x].getLength(); movesToMake>0; movesToMake--)
 				{
 				combat(player);
 				if(player.getCurrentHp()>=0)
