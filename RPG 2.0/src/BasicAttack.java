@@ -34,14 +34,28 @@ public class BasicAttack implements AttackBehavior
 			System.out.println("You deal " + damage + " damage.");
 			b.setCurrentHp(b.getCurrentHp()-damage);
 			Thread.sleep(250);
-			System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+			if(b.getCurrentHp()<0)
+				{
+				System.out.println(b.getName() + " has been killed");
+				}
+			else
+				{
+				System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+				}
 			}
 		else
 			{
 			System.out.println("The " + a.getName() + " deals " + damage + " damage.");
 			b.setCurrentHp(b.getCurrentHp()-damage);
 			Thread.sleep(250);
-			System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+			if(b.getCurrentHp()<0)
+				{
+				System.out.println(b.getName() + " has been killed");
+				}
+			else
+				{
+				System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+				}
 			}
 		Thread.sleep(250);
 		return damage;
