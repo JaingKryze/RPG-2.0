@@ -69,7 +69,7 @@ public class PlayGame
 			for(int movesToMake= map[y][x].getLength(); movesToMake>0; movesToMake--)
 				{
 				combat(player);
-				if(player.getCurrentHp()>=0)
+				if(player.getCurrentHp()<=0)
 					{
 					return;
 					}
@@ -303,7 +303,7 @@ public class PlayGame
 		Thread.sleep(100);
 		System.out.println(player.getName() + " has " + player.getCurrentHp() + " HP.");
 		Thread.sleep(100);
-		while(enemy.getCurrentHp()>0&&player.getCurrentHp()>0)
+		while(enemy.getCurrentHp()>=0&&player.getCurrentHp()>=0)
 			{
 			if(player.getDxt()>=enemy.getDxt())
 				{
