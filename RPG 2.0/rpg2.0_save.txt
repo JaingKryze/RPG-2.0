@@ -1,5 +1,5 @@
  1
- 200 171 4 4 3 2 jared 2 40 200
+ 200 148 4 4 3 2 jared 2 140 200
  Chain Mail
  Beginners Sword
- 1 0
+ 2 0

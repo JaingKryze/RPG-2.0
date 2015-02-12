@@ -18,7 +18,7 @@ public class BasicAttack implements AttackBehavior
 			}
 		rand = Math.random();
 		//crit chance
-		if(rand<((double)(b.getLuck()*.02)+.1))
+		if(rand<((double)(b.getLuck()*.02)+.1) && damage!=0)
 			{
 			Thread.sleep(250);
 			System.out.println("Critical Hit");

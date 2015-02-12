@@ -16,19 +16,19 @@ public class KillingStrike implements AttackBehavior
 			}
 		rand = Math.random();
 		//crit chance
-		if(rand<((double)(b.getLuck()*.02)+.2))
+		if(rand<.1&&damage!=0)
+			{
+			Thread.sleep(250);
+			damage = 0;
+			System.out.println("Attack Failed");
+			}
+		if(rand<((double)(b.getLuck()*.02)+.2)&&(damage!=0))
 			{
 			Thread.sleep(250);
 			System.out.println("Critical Hit");
 			damage = damage*2;
 			}
 		rand = Math.random();
-		if(rand<.1)
-			{
-			Thread.sleep(250);
-			damage = 0;
-			System.out.println("Attack Failed");
-			}
 		if(damage<0)
 			{
 			damage=0;
