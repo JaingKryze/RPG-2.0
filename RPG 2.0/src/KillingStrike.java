@@ -39,7 +39,14 @@ public class KillingStrike implements AttackBehavior
 			System.out.println("You deal " + damage + " damage.");
 			Thread.sleep(250);
 			b.setCurrentHp(b.getCurrentHp()-damage);
-			System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+			if(b.getCurrentHp()<0)
+				{
+				System.out.println(b.getName() + " has been killed");
+				}
+			else
+				{
+				System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+				}
 			}
 		else
 			{
@@ -47,7 +54,14 @@ public class KillingStrike implements AttackBehavior
 			System.out.println("The " + a.getName() + " deals " + damage + " damage.");
 			Thread.sleep(250);
 			b.setCurrentHp(b.getCurrentHp()-damage);
-			System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+			if(b.getCurrentHp()<0)
+				{
+				System.out.println(b.getName() + " has been killed");
+				}
+			else
+				{
+				System.out.println(b.getName() + " now has "+ b.getCurrentHp() + " HP.");
+				}
 			}
 		if(b.getCurrentHp()>0&&damage!=0)
 			{
